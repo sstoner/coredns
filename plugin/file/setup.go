@@ -108,11 +108,19 @@ func fileParse(c *caddy.Controller) (Zones, error) {
 		for c.NextBlock() {
 			switch c.Val() {
 			case "reload":
-				d, err := time.ParseDuration(c.RemainingArgs()[0])
-				if err != nil {
+				args := c.RemainingArgs()
+				if len(args) > 0 {
+					d, err := time.ParseDuration(args[0])
+					if err != nil {
+						return Zones{}, plugin.Error("file", err)
+					}
+					reload = d
+				}
+
+				if reload != 0 && reload < minInterval {
 					return Zones{}, plugin.Error("file", err)
 				}
-				reload = d
+
 			case "upstream":
 				// remove soon
 				c.RemainingArgs()
@@ -138,3 +146,5 @@ func fileParse(c *caddy.Controller) (Zones, error) {
 	}
 	return Zones{Z: z, Names: names}, nil
 }
+
+const minInterval = 2 * time.Second
