@@ -196,6 +196,15 @@ func (r *Request) SizeAndDo(m *dns.Msg) bool {
 		if o.Do() {
 			mo.SetDo()
 		}
+
+		if len(mo.Option) > 0 {
+			return true
+		}
+
+		if len(o.Option) > 0 {
+			mo.Option = supportedOptions(o.Option)
+		}
+
 		return true
 	}
 
