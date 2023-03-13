@@ -70,6 +70,8 @@ func parse(c *caddy.Controller) (*External, error) {
 				e.apex = args[0]
 			case "headless":
 				e.headless = true
+			case "fallthrough":
+				e.Fall.SetZonesFromArgs(c.RemainingArgs())
 			default:
 				return nil, c.Errf("unknown property '%s'", c.Val())
 			}
