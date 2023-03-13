@@ -70,10 +70,6 @@ func (e *External) ServeDNS(ctx context.Context, w dns.ResponseWriter, r *dns.Ms
 		return plugin.NextOrFailure(e.Name(), e.Next, ctx, w, r)
 	}
 
-	if e.externalFunc == nil {
-		return plugin.NextOrFailure(e.Name(), e.Next, ctx, w, r)
-	}
-
 	state.Zone = zone
 	for _, z := range e.Zones {
 		// TODO(miek): save this in the External struct.
